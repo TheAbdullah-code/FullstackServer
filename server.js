@@ -13,16 +13,16 @@ mongoose.connect(dburi, {
 
 const userSchema = new mongoose.Schema({
         name: {
-            type: string,
+            type: String,
             required : true,
         },
         email: {
-            type : string, 
+            type : String, 
             required : true,
             unique : true
         }, 
         password: {
-            type : string, 
+            type : String, 
             required : true, 
         }, 
         createdAt : {
@@ -30,14 +30,12 @@ const userSchema = new mongoose.Schema({
             default: Date.now,
         }, 
         profilePhoto: {
-            type : string, 
+            type : String, 
 
         },
         bio : {
-            type : string, 
+            type : String, 
         },
-
-
 });
 
 
