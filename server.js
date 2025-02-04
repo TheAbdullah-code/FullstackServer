@@ -1,53 +1,57 @@
-const express = require ('express'); 
-const mongoose = require ('mongoose')
+const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const cors = require('cors');
 
-const dburi = "mongodb+srv://AbdullahDB:db.key@cluster0.bmuva.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+dotenv.config();
 
+const PORT = process.env.PORT || 3000;
+const dburi = process.env.MONGO_URI;
 
 mongoose.connect(dburi, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-  })
-  .then(() => console.log("MongoDB Connected Successfully"))
-  .catch(err => console.error("MongoDB Connection Failed:", err));
+}) 
+//08103644133
+.then(() => console.log("MongoDB Connected Successfully"))
+.catch(err => console.error("MongoDB Connection Failed:", err));
 
 const userSchema = new mongoose.Schema({
-        name: {
-            type: String,
-            required : true,
-        },
-        email: {
-            type : String, 
-            required : true,
-            unique : true
-        }, 
-        password: {
-            type : String, 
-            required : true, 
-        }, 
-        createdAt : {
-            type : Date, 
-            default: Date.now,
-        }, 
-        profilePhoto: {
-            type : String, 
-
-        },
-        bio : {
-            type : String, 
-        },
+    name: {
+        type: String,
+        required: true,
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
+    profilePhoto: {
+        type: String,
+    },
+    bio: {
+        type: String,
+    },
 });
 
-
-const User = mongoose.model('User', userSchema) 
-module.export = User;
+const User = mongoose.model('User', userSchema);
+module.exports = User;
 
 const app = express();
-const cors = require('cors');
 app.use(cors());
-app.get("/api", (req, res)=>{
-    res.json({"users":["Abdullah", "Muhammad", "Abdullah"]});
-}); 
 
+app.get("/api", (req, res) => {
+    res.json({ "users": ["Abdullah", "Muhammad", "Abdullah"] });
+});
 
-app.listen(5000, () =>{console.log('Eventta Server is running on port 5000')});
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
