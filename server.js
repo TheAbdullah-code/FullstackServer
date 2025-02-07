@@ -2,8 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
-
 dotenv.config();
+
 
 const PORT = process.env.PORT || 3000;
 const dburi = process.env.MONGO_URI;
@@ -47,15 +47,17 @@ module.exports = User;
 
 const app = express();
 app.use(cors());
+app.use(express.json());
+
 
 app.get("/api", (req, res) => {
     res.json({ "users": ["Abdullah", "Muhammad", "Abdullah"] });
 });
 
 
-app.use(express.json());
 //Posting User Registration Cridentials 
 app.post("/api/register", async (req, res)=>{
+    console.log(req.body);
     try {
         const {name, email, password} = req.body;
     
@@ -83,7 +85,6 @@ catch (error){
     res.status(500).json({message: "Server Error"});
 }
 });
-
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
