@@ -16,40 +16,23 @@ mongoose.connect(dburi, {
 .then(() => console.log("MongoDB Connected Successfully"))
 .catch(err => console.error("MongoDB Connection Failed:", err));
 
+
 const userSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true,
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
-    profilePhoto: {
-        type: String,
-    },
-    bio: {
-        type: String,
-    },
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    createdAt: { type: Date, default: Date.now },
+    profilePhoto: { type: String },
+    bio: { type: String },
 });
 
 const User = mongoose.model('User', userSchema);
-module.exports = User;
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-
+app.use (cors());
 app.get("/api", (req, res) => {
     res.json({ "users": ["Abdullah", "Muhammad", "Abdullah"] });
 });
@@ -90,7 +73,7 @@ app.post("/api/register", async (req, res) => {
         res.status(500).json({ message: "Server Error" });
     }
 });
-
+module.exports = User;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
