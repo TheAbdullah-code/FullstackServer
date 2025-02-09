@@ -1,7 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
-
 const router = express.Router();
 
 // REGISTER USER
@@ -37,6 +36,11 @@ router.post("/register", async (req, res) => {
         console.error(error);
         res.status(500).json({ message: "Server Error" });
     }
+});
+
+router.get('/test', (req, res) => {
+    console.log("📌 Received GET request at /api/users/test");
+    res.status(200).json({ message: "✅ API is working!" });
 });
 
 module.exports = router;
