@@ -7,19 +7,40 @@ const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 1000;
 const dbURI = process.env.MONGO_URI;
 
 // Database Connection
-mongoose.connect(dbURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-.then(() => console.log("✅ MongoDB Connected Successfully"))
-.catch(err => console.error("❌ MongoDB Connection Failed:", err));
+// mongoose.connect(dbURI, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+// })
+// .then(() => console.log("✅ MongoDB Connected Successfully"))
+// .catch(err => console.error("❌ MongoDB Connection Failed:", err));
+const connectDB = async () => {
+    try {
+        await mongoose.connect(process.env.MONGO_URI, {
+            serverSelectionTimeoutMS: 5000, // Idan DB bai samo connection ba cikin 5 seconds, ya daina kokari
+        });
+
+        console.log("✅ MongoDB Connected Successfully");
+    } catch (error) {
+        console.error("❌ MongoDB Connection Failed:", error.message);
+        process.exit(1); // Wannan zai dakatar da server idan DB connection ya kasa
+    }
+};
+
+module.exports = connectDB;
+
 
 // Middleware
-app.use(cors());
+// app.use(cors());
+
+app.use(cors({ 
+    origin: "*", // Ko kuma saka specific frontend URL: "https://myfrontend.com"
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
 app.use(express.json());
 
 // Routes
