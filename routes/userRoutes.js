@@ -12,6 +12,7 @@ router.post("/register", async (req, res) => {
         // Validation
         if (!name || !email || !password) {
             return res.status(400).json({ message: "All fields are required" });
+            console.log(req.body);
         }
 
         // Check if user exists
