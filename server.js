@@ -30,6 +30,7 @@ const connectDB = async () => {
         process.exit(1); // Wannan zai dakatar da server idan DB connection ya kasa
     }
 };
+connectDB();
 
 module.exports = connectDB;
 
@@ -51,6 +52,11 @@ app.use("/api/users", userRoutes);
 app.get("/", (req, res) => {
     res.json({ message: "Welcome to the API!" });
 }); 
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ message: "Internal Server Error", error: err.message });
+});
 
 // Start Server
 app.listen(PORT, () => {
