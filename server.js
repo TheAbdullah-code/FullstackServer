@@ -36,12 +36,17 @@ if (process.env.MONGO_URI) {
 
 // Middleware
 // app.use(cors());
-
 app.use(cors({ 
-    origin: "*", // Ko kuma saka specific frontend URL: "https://myfrontend.com"
+    origin: "https://register-eventta.netlify.app", 
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
+// app.use(cors({ 
+//     origin: "*", // Ko kuma saka specific frontend URL: "https://myfrontend.com"
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//     allowedHeaders: ["Content-Type", "Authorization"]
+// }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -57,7 +62,7 @@ app.use((err, req, res, next) => {
     res.status(500).json({ message: "Internal Server Error", error: err.message });
 });
 // require('dotenv').config();
-console.log("📌 MONGO_URI:", process.env.MONGO_URI); // DEBUGGING
+console.log("✅ Server Successfully Connected to MangoDB Database"); // DEBUGGING
 
 
 // Start Server
