@@ -1,4 +1,5 @@
-require('dotenv').config();
+// require('dotenv').config();
+require('dotenv').config({ path: './.env' });
 const express = require('express');
 const path = require ('path')
 const mongoose = require('mongoose');
@@ -8,31 +9,29 @@ const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 const dbURI = process.env.MONGO_URI;
 
-// Database Connection
-// mongoose.connect(dbURI, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-// })
-// .then(() => console.log("✅ MongoDB Connected Successfully"))
-// .catch(err => console.error("❌ MongoDB Connection Failed:", err));
+
 const connectDB = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI, {
-            serverSelectionTimeoutMS: 5000, // Idan DB bai samo connection ba cikin 5 seconds, ya daina kokari
+            serverSelectionTimeoutMS: 5000, // Stop trying after 5 seconds
         });
 
         console.log("✅ MongoDB Connected Successfully");
     } catch (error) {
         console.error("❌ MongoDB Connection Failed:", error.message);
-        process.exit(1); // Wannan zai dakatar da server idan DB connection ya kasa
+        process.exit(1);
     }
 };
-connectDB();
 
-module.exports = connectDB;
+// Kiran function bayan an tabbatar da `.env` yana loading
+if (process.env.MONGO_URI) {
+    connectDB();
+} else {
+    console.error("❌ ERROR: MongoDB URI is not defined in .env file.");
+}
 
 
 // Middleware
@@ -57,6 +56,9 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ message: "Internal Server Error", error: err.message });
 });
+// require('dotenv').config();
+console.log("📌 MONGO_URI:", process.env.MONGO_URI); // DEBUGGING
+
 
 // Start Server
 app.listen(PORT, () => {
